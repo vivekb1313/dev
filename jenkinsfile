@@ -22,7 +22,7 @@ pipeline {
             steps {
                 sh 'docker build -t $IMAGE:latest .'
                 withCredentials([string(credentialsId: 'dockerhub-token', variable: 'DOCKER_PASS')]) {
-                    sh 'echo $DOCKER_PASS | docker login -u vivekb1313' --password-stdi
+                    sh 'echo $DOCKER_PASS | docker login -u vivekb1313 --password-stdin'
                     sh 'docker push $IMAGE:latest'
                 }
             }
