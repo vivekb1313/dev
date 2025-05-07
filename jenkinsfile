@@ -29,7 +29,7 @@ spec:
         stage('Checkout') {
             steps {
                 container('go-builder') {
-                git url: 'https://github.com/your-username/your-repo.git', branch: 'main'
+                    git url: 'https://github.com/vivekb1313/dev.git', branch: 'main'
                 }
             }
         }
