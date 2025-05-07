@@ -28,23 +28,29 @@ spec:
     stages {
         stage('Build') {
             steps {
-                sh 'go mod tidy'
-                sh 'go build -o url-checker'
+                 container('go-builder') {
+                    sh 'go mod tidy'
+                    sh 'go build -o url-checker'
+                }
             }
         }
 
         stage('Test') {
             steps {
-                sh 'go test .'
+                container('go-builder') {
+                    sh 'go test .'
+                }
             }
         }
 
         stage('Docker Build and Push') {
             steps {
-                sh 'docker build -t $IMAGE:latest .'
-                withCredentials([string(credentialsId: 'dockerhub-token', variable: 'DOCKER_PASS')]) {
+                container('go-builder') {
+                    sh 'docker build -t $IMAGE:latest .'
+                    withCredentials([string(credentialsId: 'dockerhub-token', variable: 'DOCKER_PASS')]) {
                     sh 'echo $DOCKER_PASS | docker login -u vivekb1313 --password-stdin'
                     sh 'docker push $IMAGE:latest'
+                    }
                 }
             }
         }
