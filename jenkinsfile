@@ -7,7 +7,7 @@ kind: Pod
 spec:
   containers:
   - name: go-builder
-    image: docker.io/golang:1.21
+    image: docker.io/golang:1.24.3
     command:
     - cat
     tty: true
