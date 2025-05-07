@@ -37,7 +37,7 @@ spec:
             steps {
                  container('go-builder') {
                     sh 'go mod tidy'
-                    sh 'go build -o url-checker'
+                    sh 'go build -buildvcs=false -o url-checker'
                 }
             }
         }
