@@ -2,7 +2,7 @@
 FROM nginx:latest
 
 # Copy your application's files (e.g., HTML, CSS, JS) into the Nginx web root
-COPY ./public_html /usr/share/nginx/html
+COPY ./public_html /usr/share/nginx/html/index.html
 
 # Optional: Copy your custom nginx.conf if you need to modify it
 # COPY nginx.conf /etc/nginx/nginx.conf
