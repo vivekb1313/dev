@@ -22,9 +22,9 @@ pipeline {
         
         stage('Push docker Image to docker hub') {
             steps {
-                withCredentials([string(credentialsId: 'docker-pass', variable: 'docker-pass')]) {
+                withCredentials([string(credentialsId: 'docker-pass', variable: 'DOCKER_PASS')]) {
                     sh '''
-                    echo \"$docker-pass\" | docker login -u vivekb1313 --password-stdin
+                    echo "$DOCKER_PASS" | docker login -u vivekb1313 --password-stdin
                     docker push vivekb1313/dev:nginx-${BUILD_NUMBER}
                     echo "pushed the Docker image to Github"
                     '''
