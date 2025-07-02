@@ -15,7 +15,7 @@ pipeline {
             steps {
                 sh '''
                 cd dev/spectro
-                docker build -t vivekb1313/dev:nginx-${BUILD_NUMBER} .
+                sudo docker build -t vivekb1313/dev:nginx-${BUILD_NUMBER} .
                 '''
             }
         }
