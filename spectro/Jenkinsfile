@@ -1,1 +1,64 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Fetch Git repo') {
+            steps {
+                sh '''
+                rm -rf dev
+                git clone https://github.com/vivekb1313/dev.git
+                '''
+            }
+        }
+        
+        stage('Build the Docker Image') {
+            steps {
+                sh '''
+                cd dev/spectro
+                docker build -t vivekb1313/dev:nginx-${BUILD_NUMBER} .
+                '''
+            }
+        }
+        
+        stage('Push docker Image to docker hub') {
+            steps {
+                withCredentials([string(credentialsId: 'docker-pass', variable: 'docker-pass')]) {
+                    sh 'docker login -u vivekb1313 -p ${docker-pass}'
+                    sh 'docker push vivekb1313/dev:nginx-${BUILD_NUMBER}'
+                    echo "pushed the Docker image to Github"
+                }
+            }
+        }
+        
+        stage('Update the Image in the Deployment file') {
+            steps {
+                cd spectro
+                sh 'sed -i s/dev:.*/dev:nginx-${BUILD_NUMBER}/g nginx-deploy.yaml'
+                echo "Updated the Deployment file with Latest Image tage"
+            }
+        }
+        
+        stage('Update the Git Repo') {
+            environment {
+                GIT_REPO = 'https://github.com/vivekb1313/dev.git'
+            }
+            steps {
+                withCredentials([string(credentialsId: 'git-token', variable: 'git-token')]) {
+                    sh ''' 
+                    cd spectro
+                    git config user.name "vivekb1313"
+                    git config user.email "vivek.badugu@sybyl.com"
+                    
+                    git add nginx-deploy.yaml
+                    git commit -m "Updated the nginx file with image"
+                    
+                    git push https://vivekb1313:${git-token}@github.com/vivekb1313/dev.git HEAD:main
+                    '''
+                    }
+                
+            }
+        }
+        
+    }
+}
 
