@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: vivekb1313/dev:nginx-19
+        image: vivekb1313/dev:nginx-20
         ports:
         - containerPort: 80
 ---
