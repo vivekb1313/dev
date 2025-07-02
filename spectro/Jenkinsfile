@@ -25,7 +25,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'docker-pass', variable: 'DOCKER_PASS')]) {
                     sh '''
                     echo "$DOCKER_PASS" | docker login -u vivekb1313 --password-stdin
-                    docker push vivekb1313/dev:nginx-${BUILD_NUMBER}
+                    sudo docker push vivekb1313/dev:nginx-${BUILD_NUMBER}
                     echo "pushed the Docker image to Github"
                     '''
                 }
@@ -45,7 +45,7 @@ pipeline {
                 GIT_REPO = 'https://github.com/vivekb1313/dev.git'
             }
             steps {
-                withCredentials([string(credentialsId: 'git-token', variable: 'git-token')]) {
+                withCredentials([string(credentialsId: 'git-token', variable: 'GIT_TOKEN')]) {
                     sh ''' 
                     cd spectro
                     git config user.name "vivekb1313"
@@ -54,7 +54,7 @@ pipeline {
                     git add nginx-deploy.yaml
                     git commit -m "Updated the nginx file with image"
                     
-                    git push https://vivekb1313:${git-token}@github.com/vivekb1313/dev.git HEAD:main
+                    git push https://vivekb1313:$GIT_TOKEN@github.com/vivekb1313/dev.git HEAD:main
                     '''
                     }
                 
