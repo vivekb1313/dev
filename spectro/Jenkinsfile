@@ -49,7 +49,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'git-token', variable: 'GIT_TOKEN')]) {
                     sh ''' 
-                    cd spectro
+                    cd dev/spectro
                     git config user.name "vivekb1313"
                     git config user.email "vivek.badugu@sybyl.com"
                     
